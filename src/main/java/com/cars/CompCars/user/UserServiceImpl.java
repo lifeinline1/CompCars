@@ -48,9 +48,9 @@ public class UserServiceImpl implements UserService {
             userToUpdate.setName(user.getName());
             userToUpdate.setEmail(user.getEmail());
             userToUpdate.setPassword(user.getPassword());
+            userToUpdate.setCar(user.getCar());
+            userRepository.save(userToUpdate);
         }
-
-       userRepository.save(userToUpdate);
 
     }
 

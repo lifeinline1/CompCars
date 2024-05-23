@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,17 +26,28 @@ public class UserController {
     //todo add UserDTO class!
 
     @GetMapping(path = "/all")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         //todo add message no users
         List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        List<UserDto> userDtos = new ArrayList<>();
+        for (User user : users) {
+            UserDto userDto = new UserDto();
+            userDto.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+        return ResponseEntity.ok(userDtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Integer id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable Integer id) {
         //todo add message for not found
         Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            UserDto userDto = new UserDto();
+            userDto.mapToUserDto(user.get());
+            return ResponseEntity.ok(userDto);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping(path = "/add")
@@ -51,6 +63,7 @@ public class UserController {
         Optional<Car> car = carService.getCarById(carId);
         if (user.isPresent() && car.isPresent()) {
             user.get().setCar(car.get());
+            userService.updateUser(id, user.get());
             return ResponseEntity.ok(user.get());
         }
 
@@ -59,17 +72,17 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
         //todo add validation for user not found
         //todo delete Car without User
         userService.deleteUser(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("User deleted with id: " + id);
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Integer> updateUser(@PathVariable Integer id, @Valid @RequestBody User user) {
+    public ResponseEntity<String> updateUser(@PathVariable Integer id, @Valid @RequestBody User user) {
         userService.updateUser(id, user);
-        return ResponseEntity.ok(id);
+        return ResponseEntity.ok("User with id: " + id + " updated");
     }
 
 
