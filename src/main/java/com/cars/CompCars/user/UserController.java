@@ -45,9 +45,23 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @PostMapping(path = "/{id}/assign/{carId}")
+    public ResponseEntity<User> addCarToUser(@PathVariable Integer id, @PathVariable Integer carId) {
+        Optional<User> user = userService.getUserById(id);
+        Optional<Car> car = carService.getCarById(carId);
+        if (user.isPresent() && car.isPresent()) {
+            user.get().setCar(car.get());
+            return ResponseEntity.ok(user.get());
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable Integer id) {
         //todo add validation for user not found
+        //todo delete Car without User
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
     }

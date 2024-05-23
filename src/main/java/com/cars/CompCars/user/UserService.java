@@ -12,6 +12,5 @@ public interface UserService {
     List<User> getAllUsers();
     void deleteUser(Integer id);
     void updateUser(Integer id, User user);
-
-
+    void addCarToUser(Integer id, Integer carId);
 }

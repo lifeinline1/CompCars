@@ -30,7 +30,7 @@ public class User {
     @NotBlank
     private String phoneNumber;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Car car;
 
 

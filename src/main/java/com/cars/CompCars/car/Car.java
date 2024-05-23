@@ -25,8 +25,7 @@ public class Car {
     private String makeYear;
     private String mileage;
 
-    @OneToMany
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL)
     private List<User> users;
 
 }
