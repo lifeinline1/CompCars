@@ -1,10 +1,6 @@
 package com.cars.CompCars.user;
 
 import com.cars.CompCars.car.Car;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
